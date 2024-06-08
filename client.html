@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Prediction</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Salary Prediction</h1>
+                        <form id="salaryForm" class="mt-4">
+                            <div class="mb-3">
+                                <label for="SEX" class="form-label">Sex</label>
+                                <select class="form-select" id="SEX" required>
+                                    <option value="">Select...</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="DESIGNATION" class="form-label">Designation</label>
+                                <input type="text" class="form-control" id="DESIGNATION" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="AGE" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="AGE" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="UNIT" class="form-label">Unit</label>
+                                <input type="text" class="form-control" id="UNIT" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="LEAVES_REMAINING" class="form-label">Leaves Remaining</label>
+                                <input type="number" class="form-control" id="LEAVES_REMAINING" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="PAST_EXP" class="form-label">Past Experience (in years)</label>
+                                <input type="number" class="form-control" id="PAST_EXP" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="YEAR_OF_EXPERIENCE" class="form-label">Year of Experience</label>
+                                <input type="number" class="form-control" id="YEAR_OF_EXPERIENCE" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="RATINGS" class="form-label">Ratings</label>
+                                <input type="number" class="form-control" id="RATINGS" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Predict Salary</button>
+                        </form>
+                        <div class="mt-4" id="salaryResult" style="display: none;">
+                            <h3 class="text-center">Predicted Salary: <span id="predictedSalary"></span></h3>
+                        </div>
+                        <div class="mt-4" id="errorResult" style="display: none;">
+                            <h3 class="text-center text-danger">Error: <span id="errorMessage"></span></h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('salaryForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const data = {
+                SEX: document.getElementById('SEX').value,
+                DESIGNATION: document.getElementById('DESIGNATION').value,
+                AGE: document.getElementById('AGE').value,
+                UNIT: document.getElementById('UNIT').value,
+                LEAVES_REMAINING: document.getElementById('LEAVES_REMAINING').value,
+                PAST_EXP: document.getElementById('PAST_EXP').value,
+                YEAR_OF_EXPERIENCE: document.getElementById('YEAR_OF_EXPERIENCE').value,
+                RATINGS: document.getElementById('RATINGS').value
+            };
+
+            try {
+                const response = await fetch('http://127.0.0.1:8000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                const salaryResultDiv = document.getElementById('salaryResult');
+                const errorResultDiv = document.getElementById('errorResult');
+                if (result.SALARY) {
+                    document.getElementById('predictedSalary').textContent = result.SALARY;
+                    salaryResultDiv.style.display = 'block';
+                    errorResultDiv.style.display = 'none';
+                } else {
+                    salaryResultDiv.style.display = 'none';
+                }
+            } catch (error) {
+                const errorResultDiv = document.getElementById('errorResult');
+                const salaryResultDiv = document.getElementById('salaryResult');
+                document.getElementById('errorMessage').textContent = error.message;
+                errorResultDiv.style.display = 'block';
+                salaryResultDiv.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
