@@ -18,8 +18,8 @@ This project predicts employee salaries using machine learning models based on v
 ## Installation
 
 1. Clone the repository:
-   ```sh
-   git clone https://github.com/yourusername/salary-prediction-model.git
+   ```sh 
+   git clone https://github.com/VatsAmanJha/Salary-Prediction-Model.git
    ```
 2. Navigate to the project directory and set up a virtual environment:
    ```sh
