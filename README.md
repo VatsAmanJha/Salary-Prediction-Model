@@ -13,7 +13,6 @@ This project predicts employee salaries using machine learning models based on v
 - [API Endpoints](#api-endpoints)
 - [Web Interface](#web-interface)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
